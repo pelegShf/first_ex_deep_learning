@@ -15,7 +15,7 @@ def softmax(x):
     # With a vectorized implementation, the code should be no more than 2 lines.
     #
     # For numeric stability, use the identify you proved in Ex 2 Q1.
-    return x
+    return np.exp(x)/np.exp(x).sum()
     
 
 def classifier_output(x, params):
