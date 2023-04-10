@@ -1,10 +1,12 @@
 import loglinear as ll
 import random
+import utils
 
 STUDENT={'name': 'YOUR NAME',
          'ID': 'YOUR ID NUMBER'}
 
 def feats_to_vec(features):
+
     # YOUR CODE HERE.
     # Should return a numpy vector of features.
     return None
