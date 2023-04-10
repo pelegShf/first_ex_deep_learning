@@ -20,7 +20,14 @@ def gradient_check(f, x):
         ### modify x[ix] with h defined above to compute the numerical gradient.
         ### if you change x, make sure to return it back to its original state for the next iteration.
         ### YOUR CODE HERE:
-        raise NotImplementedError
+        thetha_plus = x.copy()
+        thetha_plus[ix] = thetha_plus[ix] + h
+        thetha_minus = x.copy()
+        thetha_minus[ix] = thetha_minus[ix] - h
+        f_thetha_plus,grad_thetha_plus = f(thetha_plus)
+        f_thetha_minus,grad_thetha_minus = f(thetha_minus)
+
+        numeric_gradient = ((f_thetha_plus - f_thetha_minus)/2*h)
         ### END YOUR CODE
 
         # Compare gradients
