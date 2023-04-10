@@ -1,7 +1,9 @@
 import numpy as np
 
-STUDENT={'name': 'YOUR NAME',
-         'ID': 'YOUR ID NUMBER'}
+STUDENT={'name': 'Peleg Shefi',
+         'ID': '316523638'
+         ,'name2': 'Daniel Bazar',
+         'ID2': '314708181'}
 
 def softmax(x):
     """
@@ -9,13 +11,7 @@ def softmax(x):
     x: a n-dim vector (numpy array)
     returns: an n-dim vector (numpy array) of softmax values
     """
-    # YOUR CODE HERE
-    # Your code should be fast, so use a vectorized implementation using numpy,
-    # don't use any loops.
-    # With a vectorized implementation, the code should be no more than 2 lines.
-    #
-    # For numeric stability, use the identify you proved in Ex 2 Q1.
-    return x
+    return np.exp(x) / np.exp(x).sum()
     
 
 def classifier_output(x, params):
@@ -51,7 +47,9 @@ def loss_and_gradients(x, y, params):
     gb: vector, gradients of b
     """
     W,b = params
-    # YOU CODE HERE
+    z = np.dot(x, W) + b
+    y_hat = softmax(z)
+    loss = -1*np.log(y_hat)
     return loss,[gW,gb]
 
 def create_classifier(in_dim, out_dim):
