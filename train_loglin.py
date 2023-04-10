@@ -61,6 +61,22 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
         print(I, train_loss, train_accuracy, dev_accuracy)
     return params
 
+def create_test_result_file(test_dataset,final_params):
+    y_hat_preds = []
+    for _, features in test_dataset:
+        pos = ll.predict(feats_to_vec(features), final_params)
+        # list out keys and values separately
+        key_list = list(L2I.keys())
+        val_list = list(L2I.values())
+        # print key with val 100
+        position = val_list.index(pos)
+        y_hat_preds.append(key_list[position])
+    print(y_hat_preds)
+
+    with open('test.pred','w') as f:
+        f.writelines('\n'.join(y_hat_preds))
+
+
 if __name__ == '__main__':
     # YOUR CODE HERE
     # write code to load the train and dev sets, set up whatever you need,
@@ -73,4 +89,4 @@ if __name__ == '__main__':
     learning_rate=0.1
     params = ll.create_classifier(in_dim, out_dim)
     trained_params = train_classifier(TRAIN, DEV, num_iterations, learning_rate, params)
-
+    create_test_result_file(TEST,trained_params)
