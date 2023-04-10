@@ -26,10 +26,14 @@ def gradient_check(f, x):
         thetha_minus[ix] = thetha_minus[ix] - h
         f_thetha_plus,grad_thetha_plus = f(thetha_plus)
         f_thetha_minus,grad_thetha_minus = f(thetha_minus)
+
         numeric_gradient = ((f_thetha_plus - f_thetha_minus)/(2*h))
         ### END YOUR CODE
 
         # Compare gradients
+        print(numeric_gradient)
+
+
         reldiff = abs(numeric_gradient - grad[ix]) / max(1, abs(numeric_gradient), abs(grad[ix]))
         if reldiff > 1e-5:
             print("Gradient check failed.")
