@@ -83,7 +83,7 @@ if __name__ == '__main__':
     # and call train_classifier.
     
     # ...
-    in_dim = 600
+    in_dim = 1000
     out_dim = 10
     num_iterations= 10
     learning_rate=0.1
