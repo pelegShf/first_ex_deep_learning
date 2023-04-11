@@ -89,4 +89,4 @@ if __name__ == '__main__':
     learning_rate=0.1
     params = ll.create_classifier(in_dim, out_dim)
     trained_params = train_classifier(TRAIN, DEV, num_iterations, learning_rate, params)
-    create_test_result_file(TEST,trained_params)
+    # create_test_result_file(TEST,trained_params)
