@@ -31,7 +31,6 @@ def gradient_check(f, x):
         ### END YOUR CODE
 
         # Compare gradients
-        print(numeric_gradient)
 
 
         reldiff = abs(numeric_gradient - grad[ix]) / max(1, abs(numeric_gradient), abs(grad[ix]))

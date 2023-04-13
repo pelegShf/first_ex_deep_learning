@@ -48,6 +48,7 @@ def loss_and_gradients(x, y, params):
     W,b = params
     z = np.dot(x, W) + b
     y_hat = softmax(z)
+    print(y_hat.shape)
     loss = -1*np.log(y_hat[y])
     y_true = np.zeros(y_hat.shape[0])
     y_true[y] = 1
