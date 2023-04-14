@@ -3,6 +3,7 @@ import numpy as np
 import mlp1 as mlp
 import random
 from utils import *
+from xor_data import data as xor_dataset
 
 STUDENT={'name': 'YOUR NAME',
          'ID': 'YOUR ID NUMBER'}
@@ -21,7 +22,8 @@ def accuracy_on_dataset(dataset, params):
     good = bad = 0.0
     for label, features in dataset:
         y_hat = mlp.predict(feats_to_vec(features),params)
-        if y_hat == L2I[label]:
+        comparing_label = label if isinstance(label, (int, float)) else L2I[label]
+        if y_hat == comparing_label:
             good = good + 1
         else:
             bad = bad + 1
@@ -46,8 +48,7 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
         random.shuffle(train_data)
         for label, features in train_data:
             x = feats_to_vec(features) # convert features to a vector.
-            y = L2I[label]
-            # convert the label to number if needed.
+            y = label if isinstance(label, (int, float)) else L2I[label] # convert the label to number if needed.
             loss, grads = mlp.loss_and_gradients(x,y,params)
             # print(params)
             cum_loss += loss
@@ -92,5 +93,10 @@ if __name__ == '__main__':
     num_iterations= 10
     learning_rate=0.1
     params = mlp.create_classifier(in_dim,hid_dim, out_dim)
+    print("letter-bigrams feature set")
     trained_params = train_classifier(TRAIN, DEV, num_iterations, learning_rate, params)
+    print("letter-unigrams feature set")
+    trained_params_unigrams = train_classifier(UNI_TRAIN, UNI_DEV, num_iterations, learning_rate, params)
+    print("learning the XOR function (no validation)")
+    trained_params_xor = train_classifier(xor_dataset, xor_dataset, num_iterations, learning_rate, params)
     # create_test_result_file(TEST,trained_params)

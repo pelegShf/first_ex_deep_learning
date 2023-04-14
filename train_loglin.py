@@ -51,7 +51,7 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
             cum_loss += loss
             # update the parameters according to the gradients
             # and the learning rate.
-            print(grads[1].shape)
+            # print(grads[1].shape)
             params[0] = params[0] - learning_rate*grads[0] #W
             params[1] = params[1] - learning_rate*grads[1] #b
 
@@ -88,5 +88,8 @@ if __name__ == '__main__':
     num_iterations= 10
     learning_rate=0.1
     params = ll.create_classifier(in_dim, out_dim)
+    print("letter-bigrams feature set")
     trained_params = train_classifier(TRAIN, DEV, num_iterations, learning_rate, params)
-    create_test_result_file(TEST,trained_params)
+    print("letter-unigrams feature set")
+    trained_params_unigrams = train_classifier(UNI_TRAIN, UNI_DEV, num_iterations, learning_rate, params)
+    # create_test_result_file(TEST,trained_params)

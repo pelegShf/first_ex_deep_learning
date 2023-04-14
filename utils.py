@@ -5,7 +5,6 @@ import os
 import re
 import string
 import loglinear as ll
-from train_loglin import feats_to_vec
 
 def clean_data(text):
     #remove capitalization
@@ -34,12 +33,16 @@ def read_data(fname):
 def text_to_bigrams(text):
     return ["%s%s" % (c1, c2) for c1, c2 in zip(text, text[1:])]
 
+def text_to_unigrams(text):
+    return ["%s" % c1 for c1 in text]
 
 TRAIN = [(l, text_to_bigrams(t)) for l, t in read_data("train")]
 DEV = [(l, text_to_bigrams(t)) for l, t in read_data("dev")]
 TEST = [(l, text_to_bigrams(t)) for l, t in read_data("test")]
 
-
+UNI_TRAIN = [(l, text_to_unigrams(t)) for l, t in read_data("train")]
+UNI_DEV = [(l, text_to_unigrams(t)) for l, t in read_data("dev")]
+UNI_TEST = [(l, text_to_unigrams(t)) for l, t in read_data("test")]
 
 from collections import Counter
 
