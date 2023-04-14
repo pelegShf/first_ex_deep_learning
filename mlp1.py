@@ -15,10 +15,12 @@ def softmax(x):
 
 def classifier_output(x, params):
     W, b, U, b_tag = params
-    z1 = np.dot(x, W) + b
+    x_copy = x.copy()
+    x_copy = x_copy.reshape(x_copy.shape[0],1)
+    z1 = np.dot(W.T,x_copy) + b
     h1 = np.tanh(z1)
-    z2 = np.dot(U.T, h1) + b_tag.reshape(b_tag.shape[0],1)
-    probs = softmax(z2)
+    Z2 = np.dot(U.T,h1) + b_tag
+    probs = softmax(Z2)
     return probs
 
 
@@ -71,10 +73,10 @@ def loss_and_gradients(x, y, params):
 
 
 
-
     return loss, [gW, gb, gU, gb_tag]
 
-
+def tanh_derivative(z1):
+    return (1 - np.power(np.tanh(z1), 2))
 def create_classifier(in_dim, hid_dim, out_dim):
     """
     returns the parameters for a multi-layer perceptron,
@@ -85,10 +87,12 @@ def create_classifier(in_dim, hid_dim, out_dim):
     a flat list of 4 elements, W, b, U, b_tag.
     """
     params = []
-    W = np.zeros((in_dim, hid_dim))
-    b = np.zeros((hid_dim,1))
-    U = np.zeros((hid_dim, out_dim))
-    b_tag = np.zeros((out_dim,1))
+    np.random.seed(42)
+
+    W = np.random.randn(in_dim, hid_dim)
+    b = np.random.randn(hid_dim,1)
+    U = np.random.randn(hid_dim, out_dim)
+    b_tag = np.random.randn(out_dim,1)
     params = [W, np.asarray(b), U, np.asarray(b_tag)]
     return params
 

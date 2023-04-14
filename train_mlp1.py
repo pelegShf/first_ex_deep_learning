@@ -46,8 +46,10 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
         random.shuffle(train_data)
         for label, features in train_data:
             x = feats_to_vec(features) # convert features to a vector.
-            y = L2I[label]                 # convert the label to number if needed.
+            y = L2I[label]
+            # convert the label to number if needed.
             loss, grads = mlp.loss_and_gradients(x,y,params)
+            # print(params)
             cum_loss += loss
             # update the parameters according to the gradients
             # and the learning rate.
@@ -55,10 +57,6 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
             params[1] = params[1] - learning_rate*grads[1] #b
             params[2] = params[2] - learning_rate*grads[2] #U
             params[3] = params[3] - learning_rate*grads[3] #b_tag
-            print('W: {}'.format(params[0].sum()))
-            print('b: {}'.format(params[1].sum()))
-            print('U: {}'.format(params[2].sum()))
-            print('b_tag: {}'.format(params[3].sum()))
 
         train_loss = cum_loss / len(train_data)
         train_accuracy = accuracy_on_dataset(train_data, params)
@@ -92,7 +90,7 @@ if __name__ == '__main__':
     hid_dim = 50
     out_dim = 6
     num_iterations= 10
-    learning_rate=1
+    learning_rate=0.1
     params = mlp.create_classifier(in_dim,hid_dim, out_dim)
     trained_params = train_classifier(TRAIN, DEV, num_iterations, learning_rate, params)
     # create_test_result_file(TEST,trained_params)
