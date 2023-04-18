@@ -9,14 +9,17 @@ STUDENT={'name': 'YOUR NAME',
          'ID': 'YOUR ID NUMBER'}
 
 def feats_to_vec(features):
-    V = np.zeros(len(vocab))
-    c = Counter()
-    c.update(features)
-    d = {k: v for k, v in c.items() if k in vocab}
-    for k in d:
-        V[F2I[k]] = d[k]
-    # Should return a numpy vector of features.
-    return V
+    if isinstance(features[-1], (int, float)):
+        return np.array(features)
+    else:
+        V = np.zeros(len(vocab))
+        c = Counter()
+        c.update(features)
+        d = {k: v for k, v in c.items() if k in vocab}
+        for k in d:
+            V[F2I[k]] = d[k]
+        # Should return a numpy vector of features.
+        return V
 
 def accuracy_on_dataset(dataset, params):
     good = bad = 0.0
@@ -98,5 +101,11 @@ if __name__ == '__main__':
     print("letter-unigrams feature set")
     trained_params_unigrams = train_classifier(UNI_TRAIN, UNI_DEV, num_iterations, learning_rate, params)
     print("learning the XOR function (no validation)")
+    in_dim = 2
+    hid_dim = 4
+    out_dim = 2
+    num_iterations=30
+    learning_rate=0.1
+    params = mlp.create_classifier(in_dim,hid_dim, out_dim)
     trained_params_xor = train_classifier(xor_dataset, xor_dataset, num_iterations, learning_rate, params)
     # create_test_result_file(TEST,trained_params)

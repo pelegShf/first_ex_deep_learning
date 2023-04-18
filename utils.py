@@ -15,7 +15,7 @@ def clean_data(text):
     translator = str.maketrans('', '', string.punctuation)
     text = text.translate(translator)
     #Removing numbers
-    text = re.sub(r'\w*\d\w*', '', text)
+    text = re.sub(r'[0-9]', '', text)
     #remove unicode characters
     return text
 
