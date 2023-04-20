@@ -53,14 +53,13 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
             x = feats_to_vec(features) # convert features to a vector.
             y = label if isinstance(label, (int, float)) else L2I[label] # convert the label to number if needed.
             loss, grads = mlp.loss_and_gradients(x,y,params)
-            # print(params)
             cum_loss += loss
             # update the parameters according to the gradients
             # and the learning rate.
-            params[0] = params[0] - learning_rate*grads[0] #W
-            params[1] = params[1] - learning_rate*grads[1] #b
-            params[2] = params[2] - learning_rate*grads[2] #U
-            params[3] = params[3] - learning_rate*grads[3] #b_tag
+            params[0] = params[0] - learning_rate * grads[0]  # W
+            params[1] = params[1] - learning_rate * grads[1]  # b
+            params[2] = params[2] - learning_rate * grads[2]  # U
+            params[3] = params[3] - learning_rate * grads[3]  # b_tag
 
         train_loss = cum_loss / len(train_data)
         train_accuracy = accuracy_on_dataset(train_data, params)
@@ -90,22 +89,22 @@ if __name__ == '__main__':
     # and call train_classifier.
 
     # ...
-    in_dim = 1000
-    hid_dim = 50
-    out_dim = 6
-    num_iterations= 10
-    learning_rate=0.1
-    params = mlp.create_classifier(in_dim,hid_dim, out_dim)
-    print("letter-bigrams feature set")
-    trained_params = train_classifier(TRAIN, DEV, num_iterations, learning_rate, params)
-    print("letter-unigrams feature set")
-    trained_params_unigrams = train_classifier(UNI_TRAIN, UNI_DEV, num_iterations, learning_rate, params)
+    # in_dim = 1000
+    # hid_dim = 50
+    # out_dim = 6
+    # num_iterations= 10
+    # learning_rate=0.1
+    # params = mlp.create_classifier(in_dim,hid_dim, out_dim)
+    # print("letter-bigrams feature set")
+    # trained_params = train_classifier(TRAIN, DEV, num_iterations, learning_rate, params)
+    # print("letter-unigrams feature set")
+    # trained_params_unigrams = train_classifier(UNI_TRAIN, UNI_DEV, num_iterations, learning_rate, params)
     print("learning the XOR function (no validation)")
     in_dim = 2
-    hid_dim = 4
+    hid_dim = 5
     out_dim = 2
-    num_iterations=30
-    learning_rate=0.1
+    num_iterations=20
+    learning_rate=1
     params = mlp.create_classifier(in_dim,hid_dim, out_dim)
     trained_params_xor = train_classifier(xor_dataset, xor_dataset, num_iterations, learning_rate, params)
-    # create_test_result_file(TEST,trained_params)
+    # # create_test_result_file(TEST,trained_params)

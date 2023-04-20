@@ -4,7 +4,22 @@ STUDENT={'name': 'YOUR NAME',
          'ID': 'YOUR ID NUMBER'}
 
 def classifier_output(x, params):
-    # YOUR CODE HERE.
+    layers_count = int(len(params) / 2)
+    x_copy = np.array(x)  # (in_dim,)
+    x_copy = x_copy.reshape(x_copy.shape[0], 1)  # (in_dim,1)
+
+    # forward
+
+    cache = {"H0": x_copy}
+    for layer in range(1, layers_count + 1):
+        w = params[2 * (layer - 1)]
+        b = params[2 * (layer - 1) + 1]
+        cache[f"Z{layer}"] = np.dot(w.T, cache[f"H{layer - 1}"]) + b
+        if layer == layers_count:
+            cache[f"H{layer}"] = softmax(cache[f"Z{layer}"])
+        else:
+            cache[f"H{layer}"] = np.tanh(cache[f"Z{layer}"])
+    probs = cache[f"Z{layers_count}"]
     return probs
 
 def predict(x, params):
@@ -27,8 +42,41 @@ def loss_and_gradients(x, y, params):
     (of course, if we request a linear classifier (ie, params is of length 2),
     you should not have gW2 and gb2.)
     """
-    # YOU CODE HERE
-    return ...
+    layers_count = int(len(params) / 2)
+    x_copy = np.array(x)  # (in_dim,)
+    x_copy = x_copy.reshape(x_copy.shape[0], 1)  # (in_dim,1)
+
+    #forward
+    cache = {"H0": x_copy}
+    for layer in range(1,layers_count+1):
+        w = params[2*(layer-1)]
+        b = params[2*(layer-1)+1]
+        cache[f"Z{layer}"] = np.dot(w.T,cache[f"H{layer-1}"]) + b
+        if layer == layers_count:
+            cache[f"Z{layer}"] = softmax(cache[f"Z{layer}"])
+        else:
+            cache[f"H{layer}"] = np.tanh(cache[f"Z{layer}"])
+    #loss
+    y_hat = cache[f"Z{layers_count}"]
+    loss = -1 * np.log(y_hat[y])[0]  # scalar
+    y_true = np.zeros((y_hat.shape[0], 1))  # (out_dim,1)
+    y_true[y] = 1
+
+    #back
+    grads = {}
+    dH = y_hat-y_true
+    for l in reversed(range(1, layers_count+1)):
+        W = params[2 * (l - 1)]
+        b = params[2 * (l - 1) + 1]
+        if l == layers_count:
+            grads[f"dZ{l}"] = y_hat - y_true
+        else:
+            grads[f"dZ{l}"] = dH * (1 - cache[f"H{l}"] ** 2)
+        dH = np.dot(W, grads[f"dZ{l}"])
+        grads[f"dW{l}"] = np.dot(cache[f"H{l - 1}"],grads[f"dZ{l}"].T)
+        grads[f"db{l}"] = grads[f"dZ{l}"]
+
+    return loss, grads
 
 def create_classifier(dims):
     """
@@ -50,6 +98,19 @@ def create_classifier(dims):
     to first layer, then the second two are the matrix and vector from first to
     second layer, and so on.
     """
+    np.random.seed(42)
     params = []
+    for i in range(len(dims)-1):
+        w_i = np.random.randn(dims[i], dims[i+1])
+        b_i = np.random.randn(dims[i+1], 1)
+        params.append(w_i)
+        params.append(b_i)
     return params
 
+def softmax(x):
+    """
+    Compute the softmax vector.
+    x: a n-dim vector (numpy array)
+    returns: an n-dim vector (numpy array) of softmax values
+    """
+    return np.exp(x - np.max(x)) / np.exp(x - np.max(x)).sum()

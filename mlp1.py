@@ -93,6 +93,7 @@ def create_classifier(in_dim, hid_dim, out_dim):
     b = np.random.randn(hid_dim,1)
     U = np.random.randn(hid_dim, out_dim)
     b_tag = np.random.randn(out_dim,1)
+
     params = [W, np.asarray(b), U, np.asarray(b_tag)]
     return params
 
