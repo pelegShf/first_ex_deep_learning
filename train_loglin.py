@@ -8,14 +8,23 @@ STUDENT={'name': 'YOUR NAME',
          'ID': 'YOUR ID NUMBER'}
 
 def feats_to_vec(features):
-    V = np.zeros(len(vocab))
-    c = Counter()
-    c.update(features)
-    d = {k: v for k, v in c.items() if k in vocab}
-    for k in d:
-        V[F2I[k]] = d[k]
-    # Should return a numpy vector of features.
-    return V
+    if isinstance(features[-1], (int, float)):
+        return np.array(features)
+    else:
+        if len(features[-1])==1: # unigrams
+            F2I_fit = UNI_F2I
+            vocab_fit = uni_vocab
+        else: # bigrams
+            F2I_fit = F2I
+            vocab_fit = vocab
+        V = np.zeros(len(vocab_fit))
+        c = Counter()
+        c.update(features)
+        d = {k: v for k, v in c.items() if k in vocab_fit}
+        for k in d:
+            V[F2I_fit[k]] = d[k]
+        # Should return a numpy vector of features.
+        return V
 
 def accuracy_on_dataset(dataset, params):
     good = bad = 0.0
@@ -46,7 +55,7 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
         random.shuffle(train_data)
         for label, features in train_data:
             x = feats_to_vec(features) # convert features to a vector.
-            y = L2I[label]                 # convert the label to number if needed.
+            y = label if isinstance(label, (int, float)) else L2I[label] # convert the label to number if needed.
             loss, grads = ll.loss_and_gradients(x,y,params)
             cum_loss += loss
             # update the parameters according to the gradients
@@ -83,13 +92,19 @@ if __name__ == '__main__':
     # and call train_classifier.
     
     # ...
-    in_dim = 1000
-    out_dim = 10
+    in_dim = len(vocab)
+    out_dim = 6
     num_iterations= 10
     learning_rate=0.1
     params = ll.create_classifier(in_dim, out_dim)
     print("letter-bigrams feature set")
     trained_params = train_classifier(TRAIN, DEV, num_iterations, learning_rate, params)
+    # create_test_result_file(TEST,trained_params)
+
+    in_dim = len(uni_vocab)
+    out_dim = 6
+    num_iterations= 10
+    learning_rate=0.1
+    params = ll.create_classifier(in_dim, out_dim)
     print("letter-unigrams feature set")
     trained_params_unigrams = train_classifier(UNI_TRAIN, UNI_DEV, num_iterations, learning_rate, params)
-    # create_test_result_file(TEST,trained_params)

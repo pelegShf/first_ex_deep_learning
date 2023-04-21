@@ -40,10 +40,6 @@ TRAIN = [(l, text_to_bigrams(t)) for l, t in read_data("train")]
 DEV = [(l, text_to_bigrams(t)) for l, t in read_data("dev")]
 TEST = [(l, text_to_bigrams(t)) for l, t in read_data("test")]
 
-UNI_TRAIN = [(l, text_to_unigrams(t)) for l, t in read_data("train")]
-UNI_DEV = [(l, text_to_unigrams(t)) for l, t in read_data("dev")]
-UNI_TEST = [(l, text_to_unigrams(t)) for l, t in read_data("test")]
-
 from collections import Counter
 
 fc = Counter()
@@ -51,10 +47,24 @@ for l, feats in TRAIN:
     fc.update(feats)
 
 # 600 most common bigrams in the training set.
-vocab = set([x for x, c in fc.most_common(1000)])
+vocab = set([x for x, c in fc.most_common(600)])
 
 # label strings to IDs
 L2I = {l: i for i, l in enumerate(list(sorted(set([l for l, t in TRAIN]))))}
 # feature strings (bigrams) to IDs
 F2I = {f: i for i, f in enumerate(list(sorted(vocab)))}
-print(L2I)
+
+
+UNI_TRAIN = [(l, text_to_unigrams(t)) for l, t in read_data("train")]
+UNI_DEV = [(l, text_to_unigrams(t)) for l, t in read_data("dev")]
+UNI_TEST = [(l, text_to_unigrams(t)) for l, t in read_data("test")]
+
+uni_fc = Counter()
+for l, feats in UNI_TRAIN:
+    uni_fc.update(feats)
+
+# n most common bigrams in the training set.
+uni_vocab = set([x for x, c in uni_fc.most_common(50)])
+
+# feature strings (bigrams) to IDs
+UNI_F2I = {f: i for i, f in enumerate(list(sorted(uni_vocab)))}
