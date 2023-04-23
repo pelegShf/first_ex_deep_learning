@@ -4,7 +4,9 @@ import random
 import os
 import re
 import string
-import loglinear as ll
+
+STUDENT={'name': 'Peleg shefi_Daniel bazar',
+         'ID': '316523638_314708181'}
 
 def clean_data(text):
     #remove capitalization
@@ -25,7 +27,7 @@ def read_data(fname):
         lines = f.readlines()
     for line in lines:
         label, text = line.strip().lower().split("\t", 1)
-        text = clean_data(text)
+        # text = clean_data(text)
         data.append((label, text))
     return data
 
@@ -37,6 +39,7 @@ def text_to_unigrams(text):
     return ["%s" % c1 for c1 in text]
 
 TRAIN = [(l, text_to_bigrams(t)) for l, t in read_data("train")]
+
 DEV = [(l, text_to_bigrams(t)) for l, t in read_data("dev")]
 TEST = [(l, text_to_bigrams(t)) for l, t in read_data("test")]
 

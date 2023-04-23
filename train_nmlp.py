@@ -1,36 +1,31 @@
 import numpy as np
 
-import loglinear as ll
-import random
+import mlpn as mlpn
 from utils import *
+from xor_data import data as xor_dataset
 
-STUDENT={'name': 'YOUR NAME',
-         'ID': 'YOUR ID NUMBER'}
+STUDENT={'name': 'Peleg shefi_Daniel bazar',
+         'ID': '316523638_314708181'}
 
 def feats_to_vec(features):
     if isinstance(features[-1], (int, float)):
         return np.array(features)
     else:
-        if len(features[-1])==1: # unigrams
-            F2I_fit = UNI_F2I
-            vocab_fit = uni_vocab
-        else: # bigrams
-            F2I_fit = F2I
-            vocab_fit = vocab
-        V = np.zeros(len(vocab_fit))
+        V = np.zeros(len(vocab))
         c = Counter()
         c.update(features)
-        d = {k: v for k, v in c.items() if k in vocab_fit}
+        d = {k: v for k, v in c.items() if k in vocab}
         for k in d:
-            V[F2I_fit[k]] = d[k]
+            V[F2I[k]] = d[k]
         # Should return a numpy vector of features.
         return V
 
 def accuracy_on_dataset(dataset, params):
     good = bad = 0.0
     for label, features in dataset:
-        y_hat = ll.predict(feats_to_vec(features),params)
-        if y_hat == L2I[label]:
+        y_hat = mlpn.predict(feats_to_vec(features),params)
+        comparing_label = label if isinstance(label, (int, float)) else L2I[label]
+        if y_hat == comparing_label:
             good = good + 1
         else:
             bad = bad + 1
@@ -56,14 +51,15 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
         for label, features in train_data:
             x = feats_to_vec(features) # convert features to a vector.
             y = label if isinstance(label, (int, float)) else L2I[label] # convert the label to number if needed.
-            loss, grads = ll.loss_and_gradients(x,y,params)
+            loss, grads = mlpn.loss_and_gradients(x,y,params)
             cum_loss += loss
             # update the parameters according to the gradients
             # and the learning rate.
-            # print(grads[1].shape)
+            layers_count = int(len(params) / 2)
 
-            params[0] = params[0] - learning_rate*grads[0] #W
-            params[1] = params[1] - learning_rate*grads[1] #b
+            for l in range(1, layers_count):
+                params[2 * (l - 1)] -= learning_rate * grads[f"dW{l}"]
+                params[2 * (l - 1) + 1] -= learning_rate * grads[f"db{l}"]
 
         train_loss = cum_loss / len(train_data)
         train_accuracy = accuracy_on_dataset(train_data, params)
@@ -74,7 +70,7 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
 def create_test_result_file(test_dataset,final_params):
     y_hat_preds = []
     for _, features in test_dataset:
-        pos = ll.predict(feats_to_vec(features), final_params)
+        pos = mlpn.predict(feats_to_vec(features), final_params)
         # list out keys and values separately
         key_list = list(L2I.keys())
         val_list = list(L2I.values())
@@ -91,21 +87,24 @@ if __name__ == '__main__':
     # YOUR CODE HERE
     # write code to load the train and dev sets, set up whatever you need,
     # and call train_classifier.
-    
-    # ...
-    in_dim = len(vocab)
-    out_dim = 6
-    num_iterations= 10
-    learning_rate=0.1
-    params = ll.create_classifier(in_dim, out_dim)
-    print("letter-bigrams feature set")
-    trained_params = train_classifier(TRAIN, DEV, num_iterations, learning_rate, params)
-    # create_test_result_file(TEST,trained_params)
 
-    in_dim = len(uni_vocab)
+    # ...
+    in_dim = 1000
+    hid_dim = 500
+    hid_dim2 = 500
+    hid_dim3 = 20
     out_dim = 6
-    num_iterations= 10
+    num_iterations= 40
     learning_rate=0.1
-    params = ll.create_classifier(in_dim, out_dim)
-    print("letter-unigrams feature set")
-    trained_params_unigrams = train_classifier(UNI_TRAIN, UNI_DEV, num_iterations, learning_rate, params)
+    # params = mlpn.create_classifier([in_dim,hid_dim,hid_dim2, out_dim])
+    print("letter-bigrams feature set")
+    # trained_params = train_classifier(TRAIN, DEV, num_iterations, learning_rate, params)
+
+    # XOR
+    in_dim = 2
+    hid_dim = 4
+    out_dim = 2
+    num_iterations = 10
+    learning_rate = 0.5
+    params = mlpn.create_classifier([in_dim, hid_dim, out_dim])
+    trained_params_xor = train_classifier(xor_dataset, xor_dataset, num_iterations, learning_rate, params)

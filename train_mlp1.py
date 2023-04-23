@@ -5,8 +5,8 @@ import random
 from utils import *
 from xor_data import data as xor_dataset
 
-STUDENT={'name': 'YOUR NAME',
-         'ID': 'YOUR ID NUMBER'}
+STUDENT={'name': 'Peleg shefi_Daniel bazar',
+         'ID': '316523638_314708181'}
 
 def feats_to_vec(features):
     if isinstance(features[-1], (int, float)):
@@ -59,14 +59,13 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
             x = feats_to_vec(features) # convert features to a vector.
             y = label if isinstance(label, (int, float)) else L2I[label] # convert the label to number if needed.
             loss, grads = mlp.loss_and_gradients(x,y,params)
-            # print(params)
             cum_loss += loss
             # update the parameters according to the gradients
             # and the learning rate.
-            params[0] = params[0] - learning_rate*grads[0] #W
-            params[1] = params[1] - learning_rate*grads[1] #b
-            params[2] = params[2] - learning_rate*grads[2] #U
-            params[3] = params[3] - learning_rate*grads[3] #b_tag
+            params[0] = params[0] - learning_rate * grads[0]  # W
+            params[1] = params[1] - learning_rate * grads[1]  # b
+            params[2] = params[2] - learning_rate * grads[2]  # U
+            params[3] = params[3] - learning_rate * grads[3]  # b_tag
 
         train_loss = cum_loss / len(train_data)
         train_accuracy = accuracy_on_dataset(train_data, params)
