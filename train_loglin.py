@@ -85,7 +85,7 @@ if __name__ == '__main__':
     
     # ...
     in_dim = 1000
-    out_dim = 10
+    out_dim = 6
     num_iterations= 10
     learning_rate=0.1
     params = ll.create_classifier(in_dim, out_dim)

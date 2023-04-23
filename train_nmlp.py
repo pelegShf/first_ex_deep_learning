@@ -114,7 +114,7 @@ if __name__ == '__main__':
     in_dim = 2
     hid_dim = 4
     out_dim = 2
-    num_iterations = 30
-    learning_rate = 0.01
+    num_iterations = 50
+    learning_rate = 0.5
     params = mlpn.create_classifier([in_dim, hid_dim, out_dim])
     trained_params_xor = train_classifier(xor_dataset, xor_dataset, num_iterations, learning_rate, params)

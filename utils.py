@@ -52,7 +52,7 @@ for l, feats in TRAIN:
     fc.update(feats)
 
 # 600 most common bigrams in the training set.
-vocab = set([x for x, c in fc.most_common(1000)])
+vocab = set([x for x, c in fc.most_common(600)])
 
 # label strings to IDs
 L2I = {l: i for i, l in enumerate(list(sorted(set([l for l, t in TRAIN]))))}

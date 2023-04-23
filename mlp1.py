@@ -58,7 +58,8 @@ def loss_and_gradients(x, y, params):
     z2 = np.dot(U.T, h1) + b_tag #(out_dim,1)
 
     y_hat = softmax(z2) #(out_dim,1)
-    loss = -1 * np.log(y_hat[y])[0] #scalar
+    loss = -1 * np.log(y_hat[y]) #scalar
+    # print(-1 * np.log(y_hat[y]))
     y_true = np.zeros((y_hat.shape[0],1))  #(out_dim,1)
     y_true[y] = 1
 
@@ -89,10 +90,10 @@ def create_classifier(in_dim, hid_dim, out_dim):
     params = []
     np.random.seed(42)
 
-    W = np.random.randn(in_dim, hid_dim)
-    b = np.random.randn(hid_dim,1)
-    U = np.random.randn(hid_dim, out_dim)
-    b_tag = np.random.randn(out_dim,1)
+    W = np.random.randn(in_dim, hid_dim)*0.05
+    b = np.random.randn(hid_dim,1)*0.05
+    U = np.random.randn(hid_dim, out_dim)*0.05
+    b_tag = np.random.randn(out_dim,1)*0.05
 
     params = [W, np.asarray(b), U, np.asarray(b_tag)]
     return params
@@ -131,11 +132,11 @@ if __name__ == '__main__':
         loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U,b_tag])
         return loss, grads[1]
 
-    def _loss_and_u_grad(b):
-        global U
+    def _loss_and_u_grad(U):
+        global b_tag
         loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U,b_tag])
         return loss, grads[2]
-    def _loss_and_b_tag_grad(b):
+    def _loss_and_b_tag_grad(b_tag):
         global U
         loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U,b_tag])
         return loss, grads[3]
@@ -143,13 +144,13 @@ if __name__ == '__main__':
 
     for _ in range(10):
         W = np.random.randn(W.shape[0], W.shape[1])
-        b = np.random.randn(b.shape[0])
+        b = np.random.randn(b.shape[0],1)
         U = np.random.randn(U.shape[0], U.shape[1])
-        b_tag = np.random.randn(b_tag.shape[0])
+        b_tag = np.random.randn(b_tag.shape[0],1)
         gradient_check(_loss_and_b_grad, b)
         gradient_check(_loss_and_W_grad, W)
-        gradient_check(_loss_and_W_grad, U)
-        gradient_check(_loss_and_W_grad, b_tag)
+        gradient_check(_loss_and_u_grad, U)
+        gradient_check(_loss_and_b_tag_grad, b_tag)
 
 
 
