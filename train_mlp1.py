@@ -9,7 +9,7 @@ STUDENT={'name': 'Peleg shefi_Daniel bazar',
          'ID': '316523638_314708181'}
 
 def feats_to_vec(features):
-    if isinstance(features[-1], (int, float)):
+    if isinstance(features[-1], (int, float)): # xor
         return np.array(features)
     else:
         if len(features[-1])==1: # unigrams
@@ -108,7 +108,7 @@ if __name__ == '__main__':
     in_dim = len(uni_vocab)
     hid_dim = 25
     out_dim = 6
-    num_iterations= 10
+    num_iterations=20
     learning_rate=0.01
     params = mlp.create_classifier(in_dim,hid_dim, out_dim)
     trained_params_unigrams = train_classifier(UNI_TRAIN, UNI_DEV, num_iterations, learning_rate, params)

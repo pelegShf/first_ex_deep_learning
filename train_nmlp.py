@@ -8,15 +8,21 @@ STUDENT={'name': 'Peleg shefi_Daniel bazar',
          'ID': '316523638_314708181'}
 
 def feats_to_vec(features):
-    if isinstance(features[-1], (int, float)):
+    if isinstance(features[-1], (int, float)): # xor
         return np.array(features)
     else:
-        V = np.zeros(len(vocab))
+        if len(features[-1])==1: # unigrams
+            F2I_fit = UNI_F2I
+            vocab_fit = uni_vocab
+        else: # bigrams
+            F2I_fit = F2I
+            vocab_fit = vocab
+        V = np.zeros(len(vocab_fit))
         c = Counter()
         c.update(features)
-        d = {k: v for k, v in c.items() if k in vocab}
+        d = {k: v for k, v in c.items() if k in vocab_fit}
         for k in d:
-            V[F2I[k]] = d[k]
+            V[F2I_fit[k]] = d[k]
         # Should return a numpy vector of features.
         return V
 
@@ -89,22 +95,31 @@ if __name__ == '__main__':
     # and call train_classifier.
 
     # ...
-    in_dim = 1000
-    hid_dim = 500
-    hid_dim2 = 500
-    hid_dim3 = 20
+    in_dim = len(vocab)
+    hid_dim = 400
+    hid_dim2 = 260
     out_dim = 6
-    num_iterations= 40
+    num_iterations=40
     learning_rate=0.1
-    # params = mlpn.create_classifier([in_dim,hid_dim,hid_dim2, out_dim])
+    params = mlpn.create_classifier([in_dim,hid_dim,hid_dim2,out_dim])
     print("letter-bigrams feature set")
-    # trained_params = train_classifier(TRAIN, DEV, num_iterations, learning_rate, params)
+    trained_params = train_classifier(TRAIN, DEV, num_iterations, learning_rate, params)
+    
+    print("letter-unigrams feature set")
+    in_dim = len(uni_vocab)
+    hid_dim = 40
+    hid_dim2 = 32
+    out_dim = 6
+    num_iterations=20
+    learning_rate=0.01
+    params = mlpn.create_classifier([in_dim,hid_dim,hid_dim2,out_dim])
+    trained_params_unigrams = train_classifier(UNI_TRAIN, UNI_DEV, num_iterations, learning_rate, params)
 
     # XOR
     in_dim = 2
     hid_dim = 4
     out_dim = 2
-    num_iterations = 10
-    learning_rate = 0.5
+    num_iterations = 40
+    learning_rate = 0.1
     params = mlpn.create_classifier([in_dim, hid_dim, out_dim])
     trained_params_xor = train_classifier(xor_dataset, xor_dataset, num_iterations, learning_rate, params)

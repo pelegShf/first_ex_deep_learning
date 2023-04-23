@@ -58,7 +58,7 @@ def loss_and_gradients(x, y, params):
     z2 = np.dot(U.T, h1) + b_tag #(out_dim,1)
 
     y_hat = softmax(z2) #(out_dim,1)
-    loss = -1 * np.log(y_hat[y]) #scalar
+    loss = -1 * np.log(y_hat[y])[0] #scalar
     # print(-1 * np.log(y_hat[y]))
     y_true = np.zeros((y_hat.shape[0],1))  #(out_dim,1)
     y_true[y] = 1
@@ -90,10 +90,10 @@ def create_classifier(in_dim, hid_dim, out_dim):
     params = []
     np.random.seed(42)
 
-    W = np.random.randn(in_dim, hid_dim)*0.05
-    b = np.random.randn(hid_dim,1)*0.05
-    U = np.random.randn(hid_dim, out_dim)*0.05
-    b_tag = np.random.randn(out_dim,1)*0.05
+    W = np.random.randn(in_dim, hid_dim)#*0.1
+    b = np.random.randn(hid_dim,1)#*0.1
+    U = np.random.randn(hid_dim, out_dim)#*0.1
+    b_tag = np.random.randn(out_dim,1)#*0.1
 
     params = [W, np.asarray(b), U, np.asarray(b_tag)]
     return params
