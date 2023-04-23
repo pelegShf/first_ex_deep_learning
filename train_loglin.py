@@ -95,8 +95,8 @@ if __name__ == '__main__':
     # ...
     in_dim = len(vocab)
     out_dim = 6
-    num_iterations= 10
-    learning_rate=0.1
+    num_iterations=20
+    learning_rate=0.01
     params = ll.create_classifier(in_dim, out_dim)
     print("letter-bigrams feature set")
     trained_params = train_classifier(TRAIN, DEV, num_iterations, learning_rate, params)
@@ -105,7 +105,7 @@ if __name__ == '__main__':
     in_dim = len(uni_vocab)
     out_dim = 6
     num_iterations= 10
-    learning_rate=0.1
+    learning_rate=0.005
     params = ll.create_classifier(in_dim, out_dim)
     print("letter-unigrams feature set")
     trained_params_unigrams = train_classifier(UNI_TRAIN, UNI_DEV, num_iterations, learning_rate, params)

@@ -68,8 +68,13 @@ def create_classifier(in_dim, out_dim):
     returns the parameters (W,b) for a log-linear classifier
     with input dimension in_dim and output dimension out_dim.
     """
-    W = np.zeros((in_dim, out_dim))*0.01
-    b = np.zeros(out_dim)*0.01
+    epsilon = np.sqrt(6.0) / np.sqrt(out_dim + in_dim)
+    W = np.random.uniform(-epsilon, epsilon, size=(in_dim, out_dim))
+    epsilon = np.sqrt(6.0) / np.sqrt(out_dim + 1)
+    b = np.zeros((out_dim))
+
+    # W = np.zeros((in_dim, out_dim))*0.01
+    # b = np.zeros(out_dim)*0.01
     return [W, b]
 
 

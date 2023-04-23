@@ -90,10 +90,19 @@ def create_classifier(in_dim, hid_dim, out_dim):
     params = []
     np.random.seed(42)
 
-    W = np.random.randn(in_dim, hid_dim)#*0.1
-    b = np.random.randn(hid_dim,1)#*0.1
-    U = np.random.randn(hid_dim, out_dim)#*0.1
-    b_tag = np.random.randn(out_dim,1)#*0.1
+    epsilon = np.sqrt(6.0) / np.sqrt(hid_dim + in_dim)
+    W = np.random.uniform(-epsilon, epsilon, size=(in_dim, hid_dim))
+    epsilon = np.sqrt(6.0) / np.sqrt(hid_dim + 1)
+    b = np.zeros((hid_dim,1))
+    epsilon = np.sqrt(6.0) / np.sqrt(out_dim + hid_dim)
+    U = np.random.uniform(-epsilon, epsilon, size=(hid_dim, out_dim))
+    epsilon = np.sqrt(6.0) / np.sqrt(out_dim + 1)
+    b_tag = np.zeros((out_dim,1))
+
+    # W = np.random.randn(in_dim, hid_dim)#*0.1
+    # b = np.random.randn(hid_dim,1)#*0.1
+    # U = np.random.randn(hid_dim, out_dim)#*0.1
+    # b_tag = np.random.randn(out_dim,1)#*0.1
 
     params = [W, np.asarray(b), U, np.asarray(b_tag)]
     return params

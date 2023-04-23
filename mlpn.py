@@ -101,8 +101,13 @@ def create_classifier(dims):
     np.random.seed(42)
     params = []
     for i in range(len(dims)-1):
-        w_i = np.random.randn(dims[i], dims[i+1])
-        b_i = np.random.randn(dims[i+1], 1)
+        epsilon = np.sqrt(6.0) / np.sqrt(dims[i+1] + dims[i])
+        w_i = np.random.uniform(-epsilon, epsilon, size=(dims[i], dims[i+1]))
+        epsilon = np.sqrt(6.0) / np.sqrt(dims[i+1] + 1)
+        b_i = np.zeros((dims[i+1],1))
+
+        # w_i = np.random.randn(dims[i], dims[i+1]) 
+        # b_i = np.random.randn(dims[i+1], 1)
         params.append(w_i)
         params.append(b_i)
     return params
