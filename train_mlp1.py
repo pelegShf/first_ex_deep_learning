@@ -5,8 +5,8 @@ import random
 from utils import *
 from xor_data import data as xor_dataset
 
-STUDENT={'name': 'YOUR NAME',
-         'ID': 'YOUR ID NUMBER'}
+STUDENT={'name': 'Peleg shefi_Daniel bazar',
+         'ID': '316523638_314708181'}
 
 def feats_to_vec(features):
     if isinstance(features[-1], (int, float)):

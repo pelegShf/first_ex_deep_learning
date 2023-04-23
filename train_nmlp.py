@@ -1,12 +1,11 @@
 import numpy as np
 
 import mlpn as mlpn
-import random
 from utils import *
 from xor_data import data as xor_dataset
 
-STUDENT={'name': 'YOUR NAME',
-         'ID': 'YOUR ID NUMBER'}
+STUDENT={'name': 'Peleg shefi_Daniel bazar',
+         'ID': '316523638_314708181'}
 
 def feats_to_vec(features):
     if isinstance(features[-1], (int, float)):
@@ -53,23 +52,14 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
             x = feats_to_vec(features) # convert features to a vector.
             y = label if isinstance(label, (int, float)) else L2I[label] # convert the label to number if needed.
             loss, grads = mlpn.loss_and_gradients(x,y,params)
-            # print(params)
             cum_loss += loss
             # update the parameters according to the gradients
             # and the learning rate.
             layers_count = int(len(params) / 2)
 
             for l in range(1, layers_count):
-                # print(2 * (l - 1))
-                # print(params[2 * (l - 1)].shape)
-                # print(grads[f"dW{l}"].shape)
-
                 params[2 * (l - 1)] -= learning_rate * grads[f"dW{l}"]
                 params[2 * (l - 1) + 1] -= learning_rate * grads[f"db{l}"]
-            # params[0] = params[0] - learning_rate * grads[0]  # W
-            # params[1] = params[1] - learning_rate * grads[1]  # b
-            # params[2] = params[2] - learning_rate * grads[2]  # U
-            # params[3] = params[3] - learning_rate * grads[3]  # b_tag
 
         train_loss = cum_loss / len(train_data)
         train_accuracy = accuracy_on_dataset(train_data, params)
@@ -114,7 +104,7 @@ if __name__ == '__main__':
     in_dim = 2
     hid_dim = 4
     out_dim = 2
-    num_iterations = 50
+    num_iterations = 10
     learning_rate = 0.5
     params = mlpn.create_classifier([in_dim, hid_dim, out_dim])
     trained_params_xor = train_classifier(xor_dataset, xor_dataset, num_iterations, learning_rate, params)

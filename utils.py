@@ -4,7 +4,9 @@ import random
 import os
 import re
 import string
-import loglinear as ll
+
+STUDENT={'name': 'Peleg shefi_Daniel bazar',
+         'ID': '316523638_314708181'}
 
 def clean_data(text):
     #remove capitalization

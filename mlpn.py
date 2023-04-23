@@ -1,7 +1,7 @@
 import numpy as np
 
-STUDENT={'name': 'YOUR NAME',
-         'ID': 'YOUR ID NUMBER'}
+STUDENT={'name': 'Peleg shefi_Daniel bazar',
+         'ID': '316523638_314708181'}
 
 def classifier_output(x, params):
     layers_count = int(len(params) / 2)
@@ -114,3 +114,61 @@ def softmax(x):
     returns: an n-dim vector (numpy array) of softmax values
     """
     return np.exp(x - np.max(x)) / np.exp(x - np.max(x)).sum()
+
+
+
+if __name__ == '__main__':
+    # Sanity checks. If these fail, your gradient calculation is definitely wrong.
+    # If they pass, it is likely, but not certainly, correct.
+    from grad_check import gradient_check
+
+    [W, b,W2,b2, W3,b3] = create_classifier([3, 5,6,4])
+
+
+    def _loss_and_W_grad(W):
+        global b
+        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, W2,b2,W3,b3])
+        return loss, grads["dW1"]
+
+    def _loss_and_b_grad(b):
+        global W
+        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, W2,b2,W3,b3])
+        return loss, grads["db1"]
+
+    def _loss_and_W2_grad(W2):
+        global b2
+        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, W2,b2,W3,b3])
+        return loss, grads["dW2"]
+
+    def _loss_and_b2_grad(b2):
+        global W2
+        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, W2,b2,W3,b3])
+        return loss, grads["db2"]
+
+    def _loss_and_W3_grad(W3):
+        global b3
+        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, W2,b2,W3,b3])
+        return loss, grads["dW3"]
+
+    def _loss_and_b3_grad(b3):
+        global W3
+        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, W2,b2,W3,b3])
+        return loss, grads["db3"]
+
+
+    for _ in range(10):
+        W = np.random.randn(W.shape[0], W.shape[1])
+        b = np.random.randn(b.shape[0],1)
+        W2 = np.random.randn(W2.shape[0], W2.shape[1])
+        b2 = np.random.randn(b2.shape[0], 1)
+        W3 = np.random.randn(W3.shape[0], W3.shape[1])
+        b3 = np.random.randn(b3.shape[0],1)
+        gradient_check(_loss_and_b_grad, b)
+        gradient_check(_loss_and_W_grad, W)
+        gradient_check(_loss_and_W2_grad, W2)
+        gradient_check(_loss_and_b2_grad, b2)
+        gradient_check(_loss_and_W3_grad, W3)
+        gradient_check(_loss_and_b3_grad, b3)
+
+
+
