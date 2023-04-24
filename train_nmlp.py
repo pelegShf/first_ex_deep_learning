@@ -63,7 +63,7 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
             # and the learning rate.
             layers_count = int(len(params) / 2)
 
-            for l in range(1, layers_count):
+            for l in range(1, layers_count+1):
                 params[2 * (l - 1)] -= learning_rate * grads[f"dW{l}"]
                 params[2 * (l - 1) + 1] -= learning_rate * grads[f"db{l}"]
 
@@ -99,8 +99,8 @@ if __name__ == '__main__':
     hid_dim = 400
     hid_dim2 = 260
     out_dim = 6
-    num_iterations=40
-    learning_rate=0.1
+    num_iterations=5
+    learning_rate=0.01
     params = mlpn.create_classifier([in_dim,hid_dim,hid_dim2,out_dim])
     print("letter-bigrams feature set")
     trained_params = train_classifier(TRAIN, DEV, num_iterations, learning_rate, params)
@@ -119,7 +119,7 @@ if __name__ == '__main__':
     in_dim = 2
     hid_dim = 4
     out_dim = 2
-    num_iterations = 40
+    num_iterations = 20
     learning_rate = 0.1
     params = mlpn.create_classifier([in_dim, hid_dim, out_dim])
     trained_params_xor = train_classifier(xor_dataset, xor_dataset, num_iterations, learning_rate, params)

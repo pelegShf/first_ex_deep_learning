@@ -100,7 +100,7 @@ if __name__ == '__main__':
     params = ll.create_classifier(in_dim, out_dim)
     print("letter-bigrams feature set")
     trained_params = train_classifier(TRAIN, DEV, num_iterations, learning_rate, params)
-    # create_test_result_file(TEST,trained_params)
+    create_test_result_file(TEST,trained_params)
 
     in_dim = len(uni_vocab)
     out_dim = 6
